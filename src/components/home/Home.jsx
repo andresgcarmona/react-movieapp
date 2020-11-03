@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { fetchGenre, fetchMovies } from '../../services'
+import { fetchGenre, fetchMovies, fetchMoviesByGenre } from '../../services'
 import { Carousel, CarouselItem } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
+import { Link } from 'react-router-dom'
+import ReactStars from 'react-rating-stars-component'
 
 export function Home() {
   const [nowPlaying, setNowPlaying] = useState([])
   const [genres, setGenres] = useState([])
+  const [moviesByGenre, setMoviesByGenre] = useState([])
 
   useEffect(() => {
     const fetchAPI = async () => {
       setNowPlaying(await fetchMovies())
       setGenres(await fetchGenre())
+      setMoviesByGenre(await fetchMoviesByGenre())
     }
 
     fetchAPI()
@@ -52,6 +56,23 @@ export function Home() {
     )
   })
 
+  const movieList = moviesByGenre.slice(0, 4).map((item, index) => {
+    return (
+      <div className="col-md-3 col-sm-6" key={index}>
+        <div className="card">
+          <Link to={`/movie/${item.id}`}>
+            <img className="img-fluid" src={item.poster} alt={item.title} />
+          </Link>
+        </div>
+        <div className="mt-3">
+            <p style={{fontWeight: 'bolder'}}>{item.title}</p>
+            <p>Rated: {item.rating}</p>
+            <ReactStars count={item.rating} size={20} color1={'#f4c10f'}></ReactStars>
+          </div>
+      </div>
+    )
+  })
+
   return (
     <div className="container">
       <div className="row">
@@ -70,6 +91,12 @@ export function Home() {
           <ul className="list-inline">
             {genreList}
           </ul>
+        </div>
+      </div>
+
+      <div className="row mt-3">
+        <div className="col">
+          <div className="row">{movieList}</div>
         </div>
       </div>
     </div>

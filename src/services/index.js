@@ -57,8 +57,31 @@ export const fetchGenre = async() => {
   catch(error) {}
 }
 
-export const fetchMoviesByGenre = () => {
-  
+export const fetchMoviesByGenre = async (genreId) => {
+  try {
+    const { data } = await axios.get(moviesUrl, {
+      params: {
+        api_key: apiKey,
+        language: 'en_US',
+        page: 1,
+        with_genres: genreId
+      }
+    })
+
+    const posterUrl = 'https://image.tmdb.org/t/p/original'
+    const movies = data['results'].map(m => ({
+      id: m['id'],
+      backPoster: `${posterUrl}/${m['backdrop_path']}`,
+      popularity: m['popularity'],
+      title: m['title'],
+      poster: `${posterUrl}/${m['poster_path']}`,
+      overview: m['overview'],
+      rating: m['vote_average'],
+    }))
+
+    return movies
+  }
+  catch(error) {}
 }
 
 export const fetchPersons = () => {
