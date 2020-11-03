@@ -28,3 +28,15 @@ code {
   background-color: transparent;
   transition: all .3s ease-in-out;
 }
+
+.nextArrow {
+  color: #f4c10f;
+  font-size: 2rem;
+  font-weight: bolder;
+  cursor: pointer;
+}
+
+.nextArrow:hover {
+  color: #fff;
+  transition: all .3s ease-in-out;
+}

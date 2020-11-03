@@ -132,12 +132,32 @@ export const fetchTopRatedMovies = async() => {
   catch(error) {}
 }
 
-export const fetchMovieDetails = () => {
-  
+export const fetchMovieDetails = async(movieId) => {
+  try {
+    const { data } = await axios.get(`${movieUrl}/${movieId}`, {
+      params: {
+        api_key: apiKey,
+        language: 'en_US',
+      }
+    })
+
+    return data
+  }
+  catch(error) {}
 }
 
-export const fetchMovieVideos = () => {
-  
+export const fetchMovieVideos = async(movieId) => {
+  try {
+    const { data } = await axios.get(`${movieUrl}/${movieId}/videos`, {
+      params: {
+        api_key: apiKey,
+        language: 'en_US',
+      }
+    })
+
+    return data['results'][0]
+  }
+  catch(error) {}
 }
 
 export const fetchCasts = () => {

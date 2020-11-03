@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { fetchGenre, fetchMovies, fetchMoviesByGenre, fetchPersons, fetchTopRatedMovies } from '../../services'
 import { Carousel, CarouselItem } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faMapMarker, faPhone, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
+import { faArrowAltCircleRight, faEnvelope, faMapMarker, faPhone, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import { faFacebook, faInstagram, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons'
 import { Link } from 'react-router-dom'
 import ReactStars from 'react-rating-stars-component'
@@ -53,10 +53,16 @@ export function Home() {
     )
   })
 
+  const handleGenreClick = async(genreId) => {
+    setMoviesByGenre(await fetchMoviesByGenre(genreId))
+  }
+
   const genreList = genres.map((item, index) => {
     return (
       <li className="list-inline-item" key={index}>
-        <button className="btn btn-outline-info">{ item.name }</button>
+        <button className="btn btn-outline-info" onClick={() => {
+          handleGenreClick(item.id)
+        }}>{ item.name }</button>
       </li>
     )
   })
@@ -123,6 +129,14 @@ export function Home() {
           <ul className="list-inline">
             {genreList}
           </ul>
+        </div>
+      </div>
+
+      <div className="row mt-3">
+        <div className="col">
+          <div className="float-right">
+            <FontAwesomeIcon icon={faArrowAltCircleRight} className="nextArrow" />
+          </div>
         </div>
       </div>
 
