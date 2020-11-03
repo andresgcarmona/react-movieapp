@@ -37,8 +37,24 @@ export const fetchMovies = async() => {
   }
 }
 
-export const fetchGenre = () => {
-  
+export const fetchGenre = async() => {
+  try {
+    const { data } = await axios.get(genreUrl, {
+      params: {
+        api_key: apiKey,
+        language: 'en_US',
+        page: 1,
+      }
+    })
+
+    const genres = data['genres'].map(g => ({
+      id: g['id'],
+      name: g['name'],
+    }))
+
+    return genres
+  }
+  catch(error) {}
 }
 
 export const fetchMoviesByGenre = () => {
