@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { fetchGenre, fetchMovies, fetchMoviesByGenre } from '../../services'
+import { fetchGenre, fetchMovies, fetchMoviesByGenre, fetchPersons } from '../../services'
 import { Carousel, CarouselItem } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
@@ -10,12 +10,14 @@ export function Home() {
   const [nowPlaying, setNowPlaying] = useState([])
   const [genres, setGenres] = useState([])
   const [moviesByGenre, setMoviesByGenre] = useState([])
+  const [persons, setPersons] = useState([])
 
   useEffect(() => {
     const fetchAPI = async () => {
       setNowPlaying(await fetchMovies())
       setGenres(await fetchGenre())
-      setMoviesByGenre(await fetchMoviesByGenre())
+      setMoviesByGenre(await fetchMoviesByGenre(28))
+      setPersons(await fetchPersons())
     }
 
     fetchAPI()
@@ -73,8 +75,18 @@ export function Home() {
     )
   })
 
+  const trendingPersons = persons.slice(0, 4).map((item, index) => {
+    return (
+      <div className="col-md-3 col-sm-6" key={index}>
+        <img className="img-fluid rounded-lg" src={item.profileImage} alt={item.name} />
+        <p className="font-weight-bold text-center mt-3 mb-0">{item.name}</p>
+        <p className="font-weight-light text-center text-muted">Trending for {item.known}</p>
+      </div>
+    )
+  })
+
   return (
-    <div className="container">
+    <div className="container pb-5">
       <div className="row">
         <div className="col">
           <Carousel
@@ -94,11 +106,17 @@ export function Home() {
         </div>
       </div>
 
+      <div className="row mt-3">{movieList}</div>
+
       <div className="row mt-3">
         <div className="col">
-          <div className="row">{movieList}</div>
+          <p className="font-weight-bold"  style={{color: '#5a606b'}}>
+            TRENDING PERSONS THIS WEEK
+          </p>
         </div>
       </div>
+
+      <div className="row mt-3">{trendingPersons}</div>
     </div>
   )
 }

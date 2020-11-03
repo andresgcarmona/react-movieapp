@@ -84,8 +84,26 @@ export const fetchMoviesByGenre = async (genreId) => {
   catch(error) {}
 }
 
-export const fetchPersons = () => {
-  
+export const fetchPersons = async () => {
+  try {
+    const { data } = await axios.get(personUrl, {
+      params: {
+        api_key: apiKey,
+        language: 'en_US',
+      }
+    })
+
+    const persons = data['results'].map(p => ({
+      id: p['id'],
+      popularity: p['popularity'],
+      name: p['name'],
+      profileImage: `https://image.tmdb.org/t/p/w200/${p['profile_path']}`,
+      known: p['known_for_department']
+    }))
+
+    return persons
+  }
+  catch(error) {}
 }
 
 export const fetchTopRatedMovies = () => {
